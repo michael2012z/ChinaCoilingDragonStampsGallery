@@ -91,7 +91,8 @@ class HtmlDownloader():
     
     def downLoad(self, url):
         #print "downloading file: " + url
-        request = urllib2.Request(url, self.login_data, self.headers)
+        #request = urllib2.Request(url, self.login_data, self.headers)
+        request = urllib2.Request(url)
         try:
             response = urllib2.urlopen(request)  
             downloaded = response.read()
@@ -364,10 +365,10 @@ class SearchCondition:
         return self.base + " : " + self.alias
 
 searchConditions = [
-    #SearchCondition("蟠龙1元新", ["清代邮票", "民国邮票"], ["蟠龙1元"], ["石印"], "coiling_dragon_1d_mint", "1dm"),
-    #SearchCondition("蟠龙1元旧", ["清代邮票", "民国邮票"], ["蟠龙1元"], ["石印"], "coiling_dragon_1d_used", "1du"),
-    #SearchCondition("蟠龙2元新", ["清代邮票", "民国邮票"], ["蟠龙2元"], ["石印"], "coiling_dragon_2d_mint", "2dm"),
-    #SearchCondition("蟠龙2元旧", ["清代邮票", "民国邮票"], ["蟠龙2元"], ["石印"], "coiling_dragon_2d_used", "2du"),
+    SearchCondition("蟠龙1元新", ["清代邮票", "民国邮票"], ["蟠龙1元"], ["石印"], "coiling_dragon_1d_mint", "1dm"),
+    SearchCondition("蟠龙1元旧", ["清代邮票", "民国邮票"], ["蟠龙1元"], ["石印"], "coiling_dragon_1d_used", "1du"),
+    SearchCondition("蟠龙2元新", ["清代邮票", "民国邮票"], ["蟠龙2元"], ["石印"], "coiling_dragon_2d_mint", "2dm"),
+    SearchCondition("蟠龙2元旧", ["清代邮票", "民国邮票"], ["蟠龙2元"], ["石印"], "coiling_dragon_2d_used", "2du"),
     SearchCondition("蟠龙5元新", ["清代邮票", "民国邮票"], ["蟠龙5元"], ["石印"], "coiling_dragon_5d_mint", "5dm"),
     SearchCondition("蟠龙5元旧", ["清代邮票", "民国邮票"], ["蟠龙5元"], ["石印"], "coiling_dragon_5d_used", "5du"),
     ]
@@ -454,7 +455,6 @@ class DataHandler():
             html = self.downloader.getHtml(url)
             if html == None:
                 break
-            #html = self.downloader.download(url)
             if historyItemListParser.parse(html) == False:
                 self.failureList.append(url)
             # save the tmp file to debug
@@ -485,7 +485,6 @@ class DataHandler():
             html = self.downloader.getHtml(url)
             if html == None:
                 continue
-            #html = self.downloader.download(url)
             historyItemParser = HistoryItemParser()
             historyItemParser.parse(html)
             tmpItem = historyItemParser.getHistoryItem()
