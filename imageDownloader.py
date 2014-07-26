@@ -363,13 +363,14 @@ class SearchCondition:
     def toString(self):
         return self.base + " : " + self.alias
 
-searchConditions = [SearchCondition("蟠龙1元新", ["清代邮票", "民国邮票"], ["蟠龙1元"], ["石印"], "coiling_dragon_1d_mint", "1dm"),
-                    SearchCondition("蟠龙1元旧", ["清代邮票", "民国邮票"], ["蟠龙1元"], ["石印"], "coiling_dragon_1d_used", "1du"),
-                    SearchCondition("蟠龙2元新", ["清代邮票", "民国邮票"], ["蟠龙2元"], ["石印"], "coiling_dragon_2d_mint", "2dm"),
-                    SearchCondition("蟠龙2元旧", ["清代邮票", "民国邮票"], ["蟠龙2元"], ["石印"], "coiling_dragon_2d_used", "2du"),
-                    SearchCondition("蟠龙5元新", ["清代邮票", "民国邮票"], ["蟠龙5元"], ["石印"], "coiling_dragon_5d_mint", "5dm"),
-                    SearchCondition("蟠龙5元旧", ["清代邮票", "民国邮票"], ["蟠龙5元"], ["石印"], "coiling_dragon_5d_used", "5du"),
-                    ]
+searchConditions = [
+    #SearchCondition("蟠龙1元新", ["清代邮票", "民国邮票"], ["蟠龙1元"], ["石印"], "coiling_dragon_1d_mint", "1dm"),
+    #SearchCondition("蟠龙1元旧", ["清代邮票", "民国邮票"], ["蟠龙1元"], ["石印"], "coiling_dragon_1d_used", "1du"),
+    #SearchCondition("蟠龙2元新", ["清代邮票", "民国邮票"], ["蟠龙2元"], ["石印"], "coiling_dragon_2d_mint", "2dm"),
+    #SearchCondition("蟠龙2元旧", ["清代邮票", "民国邮票"], ["蟠龙2元"], ["石印"], "coiling_dragon_2d_used", "2du"),
+    SearchCondition("蟠龙5元新", ["清代邮票", "民国邮票"], ["蟠龙5元"], ["石印"], "coiling_dragon_5d_mint", "5dm"),
+    SearchCondition("蟠龙5元旧", ["清代邮票", "民国邮票"], ["蟠龙5元"], ["石印"], "coiling_dragon_5d_used", "5du"),
+    ]
 
 class HistoryItem():
     ref = ""
@@ -712,58 +713,6 @@ class SearchResultXmlGenerator():
             self.addHistoryItem(item)
         self.writeToFile()
 
-
-
-class TestHistoryItemParser(HTMLParser):
-    text = ""
-    def __init__(self):
-        HTMLParser.__init__(self)
-
-    def parse(self, html):
-        self.feed(html)
-
-    def handle_starttag(self,tag,attrs):
-        self.text += "tag   : " + tag + "\n"
-        self.text += "attrs : " + str(attrs) + "\n"
-        
-    def handle_data(self, data):
-        self.text += "data  : " + str(data) + "\n"
-        
-    def getText(self):
-        return self.text
-
-import random
-
-def ttt():
-    x = []
-    y = []
-    for i in range(0, 5):
-        x.append(date.fromordinal(730920 + random.randint(0, 10)))
-        y.append(random.randint(10, 20))
-    print x
-    print y
-    plt.plot(x, y)
-    plt.title('Title')
-    plt.ylabel('Price')
-    plt.xlabel('Date')
-    plt.grid(True)
-    #fig = plt.figure()
-    #fig.autofmt_xdate()
-    plt.show()
-
-def encodingTest():
-    h = '汉字'
-    u = u'汉字'
-    i = raw_input()
-    print h, h.decode("utf-8"), h.decode("utf-8").encode("GBK")
-    print u
-    print i
-
-    print urllib.pathname2url(h)
-    print urllib.pathname2url(u.encode("utf-8"))
-    print urllib.pathname2url(i.decode("gbk").encode("utf-8"))
-    return
-
 def doCommandUpdate(alias, dataHandler):
     if True:
         if True:
@@ -794,13 +743,13 @@ def doCommandDownload(alias, dataHandler):
                     searchItems = dataHandler.getAllSearchItems()
                 else:
                     searchItems = [dataHandler.getSearchItemByAlias(alias)]
+                downloadList = []
                 for searchItem in searchItems:
                     if searchItem == None:
                         print "ERROR: can't find alias: " + alias
                     else:
                         historyItems = sorted(searchItem.historyItems, key=lambda x: x.date)
-                        downloadList = []
-                        # make category dir
+                                                # make category dir
                         dirName = searchItem.condition.folder
                         if os.path.exists(dirName) == False:
                             os.mkdir(dirName)
@@ -808,7 +757,7 @@ def doCommandDownload(alias, dataHandler):
                             print '"' + dirName + '" file exist, remove it'
                             continue
                         # make sub dir
-                        subDirNames = ["src", "m_size", "back"]
+                        subDirNames = ["src", "m_size"]
                         for subDirName in subDirNames:
                             subDir = dirName + "/" + subDirName
                             if os.path.exists(subDir) == False:
@@ -822,43 +771,29 @@ def doCommandDownload(alias, dataHandler):
                             historyItemParser = HistoryItemParser()
                             (xxx, historyItem.auctionData) = historyItemParser.parsePureAuctionData(historyItem.auctionText)
                             #print historyItem.auctionData
-                            pictureData = historyItem.auctionData.get("pictures")
-                            # download picture face image
-                            if len(pictureData) < 1: # no image data
-                                continue
-                            facePictureData = pictureData[0]
-                            # download src image
-                            keys = ["src", "m_size"]
-                            for key in keys:
-                                picURL = facePictureData.get(key)
-                                if picURL <> None:
-                                    picFileName = searchItem.condition.folder + "/" + key + "/" + picURL.split("/")[-3] + "_" + picURL.split("/")[-2] + "_" + picURL.split("/")[-1]
-                                    if os.path.exists(picFileName) == False:
-                                        downloadList.append([picURL, picFileName])
-                            # download picture back image
-                            if len(pictureData) < 2: # no back image data
-                                continue
-                            backPictureData = pictureData[1]
-                            key = "src"
-                            picURL = backPictureData.get(key)
-                            if picURL <> None:
-                                picFileName = searchItem.condition.folder + "/" + "back" + "/" + picURL.split("/")[-3] + "_" + picURL.split("/")[-2] + "_" + picURL.split("/")[-1]
-                                if os.path.exists(picFileName) == False:
-                                    downloadList.append([picURL, picFileName])
-                        # then download image one by one
-                        for i in range(0, len(downloadList)):
-                            picURL = downloadList[i][0]
-                            picFileName = downloadList[i][1]
-                            try:
-                                print "(" + str(i) + "/" + str(len(downloadList))+ ") downloading image: " + picURL
-                                pic = dataHandler.download(picURL)
-                                if pic <> None:
-                                    picFile = open(picFileName, "wb")
-                                    picFile.write(pic)
-                                    picFile.close()
-                            except Exception, e:
-                                print e
-                                continue
+                            pictureDatas = historyItem.auctionData.get("pictures")
+                            for pictureData in pictureDatas:
+                                keys = subDirNames
+                                for key in keys:
+                                    picURL = pictureData.get(key)
+                                    if picURL <> None:
+                                        picFileName = searchItem.condition.folder + "/" + key + "/" + picURL.split("/")[-3] + "_" + picURL.split("/")[-2] + "_" + picURL.split("/")[-1]
+                                        if os.path.exists(picFileName) == False:
+                                            downloadList.append([picURL, picFileName])
+                # then download image one by one
+                for i in range(0, len(downloadList)):
+                    picURL = downloadList[i][0]
+                    picFileName = downloadList[i][1]
+                    try:
+                        print "(" + str(i) + "/" + str(len(downloadList))+ ") downloading image: " + picURL
+                        pic = dataHandler.download(picURL)
+                        if pic <> None:
+                            picFile = open(picFileName, "wb")
+                            picFile.write(pic)
+                            picFile.close()
+                    except Exception, e:
+                        print e
+                        continue
     return
 
 if __name__ == '__main__':
