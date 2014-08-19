@@ -10,6 +10,7 @@ siteUrl = "http://michael2012z.github.io/ChinaCoilingDragonStampsGallery/"
 for searchCondition in searchConditions:
 	faceFiles = []
 	imageFiles = os.listdir(searchCondition.folder + "/src")
+        imageFiles.sort()
 	for imageFile in imageFiles[::-1]:
 		if os.path.isfile(searchCondition.folder + "/src/" + imageFile) and os.path.splitext(imageFile)[1] == ".jpg" and os.path.splitext(imageFile)[0].find("A") > 0 and os.path.splitext(imageFile)[0].find("A") == (len(os.path.splitext(imageFile)[0])-1):
 			faceFiles.append([searchCondition.folder + "/src" + "/" + imageFile, searchCondition.folder + "/m_size" + "/" + os.path.splitext(imageFile)[0] + "_M" + ".jpg"]) 
