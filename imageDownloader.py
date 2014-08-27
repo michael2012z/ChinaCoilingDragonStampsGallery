@@ -5,12 +5,6 @@ import urllib, urllib2, cookielib
 import os, time
 import xml.dom.minidom
 
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
-import matplotlib.cbook as cbook
-import matplotlib.ticker as ticker
-
 from datetime import *  
 #import locale
 from decimal import Decimal
