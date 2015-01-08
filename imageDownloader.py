@@ -772,7 +772,11 @@ def doCommandDownload(alias, dataHandler):
                                 for key in keys:
                                     picURL = pictureData.get(key)
                                     if picURL <> None:
-                                        picFileName = searchItem.condition.folder + "/" + key + "/" + picURL.split("/")[-3] + "_" + picURL.split("/")[-2] + "_" + picURL.split("/")[-1]
+                                        nameLen = len(picURL.split("/")[-1].split(".")[0])
+                                        picFileName = searchItem.condition.folder + "/" + key + "/" 
+                                        for i in range(0, 10-nameLen):
+                                            picFileName = picFileName + "0"
+                                        picFileName = picFileName + picURL.split("/")[-1]
                                         if os.path.exists(picFileName) == False:
                                             downloadList.append([picURL, picFileName])
                 # then download image one by one
