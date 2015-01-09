@@ -130,13 +130,14 @@ class HistoryItemListParser(HTMLParser):
 
 
     def handle_starttag(self,tag,attrs):
-        if self.inCenterList == True and tag == "a" and len(attrs) == 3 and attrs[2][0] == 'href':
+        if self.inCenterList == True and tag == "a" and len(attrs) == 4 and attrs[2][0] == 'href':
             item = HistoryItem()
             item.ref = attrs[2][1]
             item.name = attrs[1][1]
             self.historyItems.append(item)
             self.itemsFoundInCurrentPage += 1 
         elif tag == "div" and len(attrs) == 2 and attrs[1] == ('id', 'center_list_id'):
+            print "center_list_id fond"
             self.inCenterList = True
         elif tag == 'input' and len(attrs) == 4 and attrs[3] == ('id', 'totalPage'):
             self.totalPage = int(attrs[2][1])
@@ -528,7 +529,7 @@ class DataHandler():
 
     def saveToTmpFile(self, historyItem, html):
         fileName = 'tmp/' + historyItem.id + ".shtml"
-        f= open(fileName, 'w')
+        f = open(fileName, 'w')
         f.write(html)
         f.close()
 
