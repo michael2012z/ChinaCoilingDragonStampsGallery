@@ -777,8 +777,16 @@ def doCommandDownload(alias, dataHandler):
                                         nameLen = len(picURL.split("/")[-1].split(".")[0])
                                         picFileName = searchItem.condition.folder + "/" + key + "/" 
                                         picFileName = picFileName + dt.strftime("%Y-%m-%d") + "_"
-                                        #for i in range(0, 15-nameLen):
-                                        #    picFileName = picFileName + "0"
+                                        uniqueNameLen = 0
+                                        if (key == "src"):
+                                            uniqueNameLen = 10
+                                        elif (key == "m_size"):
+                                            uniqueNameLen = 12
+                                        else:
+                                            print "ERROR"
+                                            continue
+                                        for i in range(0, uniqueNameLen - nameLen):
+                                            picFileName = picFileName + "0"
                                         picFileName = picFileName + picURL.split("/")[-1]
                                         if os.path.exists(picFileName) == False:
                                             downloadList.append([picURL, picFileName])

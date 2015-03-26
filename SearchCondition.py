@@ -31,4 +31,5 @@ searchConditions = [
     SearchCondition("蟠龙2元旧", ["清代邮票", "民国邮票"], ["蟠龙2元"], ["石印"], "coiling_dragon_2d_used", "2du", "大清蟠龙邮票 贰圆旧票"),
     SearchCondition("蟠龙5元新", ["清代邮票", "民国邮票"], ["蟠龙5元"], ["石印"], "coiling_dragon_5d_mint", "5dm", "大清蟠龙邮票 伍圆新票"),
     SearchCondition("蟠龙5元旧", ["清代邮票", "民国邮票"], ["蟠龙5元"], ["石印"], "coiling_dragon_5d_used", "5du", "大清蟠龙邮票 伍圆旧票"),
+    SearchCondition("蟠龙5元加盖楷体中华民国", ["清代邮票", "民国邮票"], ["蟠龙5元"], ["石印"], "coiling_dragon_5d_tmp", "tmp", "大清蟠龙邮票 伍圆新票"),
     ]
