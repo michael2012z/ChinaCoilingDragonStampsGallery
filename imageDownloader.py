@@ -137,7 +137,6 @@ class HistoryItemListParser(HTMLParser):
             self.historyItems.append(item)
             self.itemsFoundInCurrentPage += 1 
         elif tag == "div" and len(attrs) == 2 and attrs[1] == ('id', 'center_list_id'):
-            print "center_list_id fond"
             self.inCenterList = True
         elif tag == 'input' and len(attrs) == 4 and attrs[3] == ('id', 'totalPage'):
             self.totalPage = int(attrs[2][1])
@@ -764,6 +763,7 @@ def doCommandDownload(alias, dataHandler):
                             
                         # build download list at first
                         for historyItem in historyItems:
+                            dt = datetime.strptime(historyItem.date, "%Y-%m-%d %H:%M:%S")
                             historyItemParser = HistoryItemParser()
                             (xxx, historyItem.auctionData) = historyItemParser.parsePureAuctionData(historyItem.auctionText)
                             #print historyItem.auctionData
@@ -775,7 +775,16 @@ def doCommandDownload(alias, dataHandler):
                                     if picURL <> None:
                                         nameLen = len(picURL.split("/")[-1].split(".")[0])
                                         picFileName = searchItem.condition.folder + "/" + key + "/" 
-                                        for i in range(0, 10-nameLen):
+                                        picFileName = picFileName + dt.strftime("%Y-%m-%d") + "_"
+                                        uniqueNameLen = 0
+                                        if (key == "src"):
+                                            uniqueNameLen = 12
+                                        elif (key == "m_size"):
+                                            uniqueNameLen = 14
+                                        else:
+                                            print "ERROR"
+                                            continue
+                                        for i in range(0, uniqueNameLen - nameLen):
                                             picFileName = picFileName + "0"
                                         picFileName = picFileName + picURL.split("/")[-1]
                                         if os.path.exists(picFileName) == False:
