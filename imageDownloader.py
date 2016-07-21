@@ -206,14 +206,14 @@ class HistoryItemParser(HTMLParser):
             self.historyItem.price = data
             self.parsingPrice = False
         elif self.parsingAuction == True:
-            if str(data).find('var auction') >= 0:
+            if str(data).find('var auction = ') >= 0:
                 (self.historyItem.auctionText, self.historyItem.auctionData) = self.parseRawAuctionData(data)
             self.parsingAuction = False
 
 
     def findAuctionBlock(self, text):
-#        print "findAuctionBlock(): text = "
-#        print text
+        # print "findAuctionBlock(): text = "
+        # print text
         remainingBrackets = []
         blockText = ""
         for c in text:
@@ -238,8 +238,8 @@ class HistoryItemParser(HTMLParser):
                 else:
                     print "brackets {} mismatch"
                     return ""
-#        print "findAuctionBlock(): return = "
-#        print blockText[1:len(blockText)-1]
+        # print "findAuctionBlock(): return = "
+        # print blockText[1:len(blockText)-1]
         return blockText[1:len(blockText)-1]
             
 
@@ -317,6 +317,9 @@ class HistoryItemParser(HTMLParser):
         auctionText = auctionText[str(auctionText).find('var auction'):]
         auctionText = auctionText[str(auctionText).find('{'):]
         pureAuctionText = self.findAuctionBlock(auctionText)
+        #print "#########################"
+        #print pureAuctionText
+        #print "#########################"
         dic = self.buildAuctionDic(pureAuctionText)
         return (pureAuctionText, dic)
 
@@ -432,7 +435,7 @@ class DataHandler():
         if categoryStr == "":
             categoryStr = urllib.pathname2url("N")
         url += categoryStr
-        url += "-N-00-N-0-N-1-N-N-N-N-"
+        url += "-N-00-N-0-N-1-N-N-N-N-8-"
         url += str(page)
         url += ".htm"
         return  url
@@ -454,7 +457,7 @@ class DataHandler():
             if historyItemListParser.parse(html) == False:
                 self.failureList.append(url)
             # save the tmp file to debug
-            # self.saveToListFile(searchItem.condition.base+"_"+str(page), html)
+            self.saveToListFile(searchItem.condition.base+"_"+str(page), html)
             page += 1
         historyItemList = historyItemListParser.getHistoryItemList()
         historyItemListParser.clean()  
@@ -527,13 +530,13 @@ class DataHandler():
         return self.searchData.searchItems
 
     def saveToTmpFile(self, historyItem, html):
-        fileName = 'tmp/' + historyItem.id + ".shtml"
+        fileName = 'debug/' + historyItem.id + ".shtml"
         f = open(fileName, 'w')
         f.write(html)
         f.close()
 
     def saveToListFile(self, name, html):
-        fileName = 'list/' + name + ".html"
+        fileName = 'debug/' + name + ".html"
         f= open(fileName, 'w')
         f.write(html)
         f.close()
