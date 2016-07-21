@@ -783,13 +783,15 @@ def doCommandDownload(alias, dataHandler):
                                         if (key == "src"):
                                             uniqueNameLen = 12
                                         elif (key == "m_size"):
-                                            uniqueNameLen = 14
+                                            uniqueNameLen = 12
                                         else:
                                             print "ERROR"
                                             continue
                                         for i in range(0, uniqueNameLen - nameLen):
                                             picFileName = picFileName + "0"
                                         picFileName = picFileName + picURL.split("/")[-1]
+                                        if picFileName.find('!') > 0:
+                                            picFileName = picFileName[:picFileName.find('!')]
                                         if os.path.exists(picFileName) == False:
                                             downloadList.append([picURL, picFileName])
                 # then download image one by one
